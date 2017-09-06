@@ -13,9 +13,9 @@
 	}
 	#hero{
 		background: url('1942.gif');
-		background-position: -85px -180px;
-		width:28px;
-		height:28px;
+		background-position: -42px -111px;
+		width:47px;
+		height:40px;
 		position:absolute;
 	}
 	.enemy1{
@@ -42,13 +42,20 @@
 		font-size:30px;
 		font-family: Arial;	
 	}
+    .explosion{
+        background: url('1942.gif');
+        background-position: -88px -42px;
+        width: 24px;
+        height: 24px;
+        position: absolute;
+    }
 </style>
 </head>
 <body>
 	<div id='container'>
 		<div id='hero' style='top:300px; left:300px;'></div>
 		<div id='enemies'></div>
-		<div id='bullets'></div>	
+        <div id='bullets'></div>	
 	</div>
 
 	<div id='score'>0</div>
@@ -63,7 +70,7 @@
         y: 400
     }
 
-    var enemies = [{x: 50, y: 50}, {x: 250, y: 50}, {x:450, y: 250}, {x:550, y: 150}];
+    var enemies = [{x: 50, y: 50}, {x: 250, y: 50}, {x:450, y: 250}, {x:550, y: 150}, {x: 100, y: 90}, {x: 200, y: 10}, {x: 300, y: 150},];
 
     var bullets = [];
 
@@ -111,7 +118,7 @@
     }
 
     function displayScore(){
-        
+        document.getElementById('score').innerHTML = score;
     }
 
     function gameLoop(){
@@ -121,19 +128,36 @@
         moveBullets();
         displayBullets();
         detectCollision();
+        detectCrash();
+        displayScore();
     }
 
     function detectCollision(){
+        var output = '';
         for(var i=0; i<bullets.length; i++){
             for(var j=0; j<enemies.length; j++){
                 if(Math.abs(bullets[i].x - enemies[j].x) < 10 && Math.abs(bullets[i].y - enemies[j].y)<10 ){
-                    console.log('bullet', i, 'and enemy', j, 'collided');
+                    // console.log('bullet', i, 'and enemy', j, 'collided');
+                    output += "<div class='explosion' style='top:"+enemies[j].y+"px; left:"+enemies[j].x+"px;'></div>";
+                    score+=10;
+                    document.getElementById('enemies').innerHTML = output;
+                
                 }
+                
             }
         }
     }
 
-    setInterval(gameLoop, 20);
+    function detectCrash(){
+        for(var i=0; i<enemies.length; i++){
+                if(Math.abs(hero.x - enemies[i].x) < 10 && Math.abs(hero.y - enemies[i].y)<10){
+                    console.log('hero and enemy', i, 'collided');
+                    score -= 100;
+                }
+            }
+        }
+
+    setInterval(gameLoop, 50);
 
     document.onkeydown = function(a){
         if(a.keyCode == 37){
@@ -149,7 +173,7 @@
             hero.y -= 10;
         }
         else if(a.keyCode == 32){
-            bullets.push({x: hero.x+6, y: hero.y-15});
+            bullets.push({x: hero.x+17, y: hero.y-15});
             displayBullets();
         }
         displayHero();
@@ -163,3 +187,8 @@
 
 </body>
 </html>
+
+Get another type of airplane to show
+
+Get the enemy to explode when it is hit 
+When the bullet hits, make a sound
