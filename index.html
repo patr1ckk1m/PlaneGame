@@ -1,65 +1,18 @@
 <html>
 <head>
 	<title>1942 Game</title>
-
-<style type="text/css">
-	body{
-		background-color:black;
-	}
-	#container{
-		background: url('background.jpg');
-		width:1000px;
-		height:550px;
-	}
-	#hero{
-		background: url('1942.gif');
-		background-position: -42px -111px;
-		width:47px;
-		height:40px;
-		position:absolute;
-	}
-	.enemy1{
-		background: url('1942.gif');
-		background-position: -30px -10px;
-		width:28px;
-		height:28px;
-		position:absolute;
-	}
-
-	.bullet{
-		background: url('1942.gif');
-		background-position: -185px -400px;
-		width:18px;
-		height:18px;
-		position:absolute;
-	}
-	#score{
-		position:absolute;
-		border:10px solid red;
-		top:20px;
-		left:800px;
-		background-color:white;
-		padding:10px;
-		font-size:30px;
-		font-family: Arial;	
-	}
-    .explosion{
-        background: url('1942.gif');
-        background-position: -88px -42px;
-        width: 24px;
-        height: 24px;
-        position: absolute;
-    }
-</style>
+<link rel = "stylesheet" type = "text/css" href = "static/style.css">
+<link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
 </head>
 <body>
+
 	<div id='container'>
 		<div id='hero' style='top:300px; left:300px;'></div>
 		<div id='enemies'></div>
-        <div id='bullets'></div>	
+        <div id='bullets'></div>
 	</div>
 
-	<div id='score'>0</div>
+    <div id='score'>0</div>
 
 
 <script>
@@ -68,7 +21,7 @@
         x: 300,
         y: 400
     }
-    var enemies = [{x: 50, y: 50}, {x: 250, y: 50}, {x:450, y: 250}, {x:550, y: 150}, {x: 100, y: 90}, {x: 200, y: 10}, {x: 300, y: 150},];
+    var enemies = [{x: 50, y: 80}, {x: 250, y: 80}, {x:450, y: 250}, {x:550, y: 150}, {x: 100, y: 90}, {x: 200, y: 100}, {x: 300, y: 150},];
     var bullets = [];
 
 
@@ -92,7 +45,7 @@
             enemies[i].y += 5;
             if(enemies[i].y > 540){
                 enemies[i].y = 0;
-                enemies[i].x = Math.random()*500;
+                enemies[i].x = Math.random()*800;
                 
             }
         }
@@ -132,13 +85,15 @@
         displayScore();
     }
 
+    setInterval(gameLoop, 50);
+
     function detectCollision(){
         var output = '';
         for(var i=0; i<bullets.length; i++){
             for(var j=0; j<enemies.length; j++){
-                if(Math.abs(bullets[i].x - enemies[j].x) < 10 && Math.abs(bullets[i].y - enemies[j].y)<10 ){
+                if(Math.abs(bullets[i].x - enemies[j].x) < 15 && Math.abs(bullets[i].y - enemies[j].y)<15 ){
                     // console.log('bullet', i, 'and enemy', j, 'collided');
-                    var mySound = new Audio("Explosion.mp3");
+                    var mySound = new Audio("sounds/Explosion.mp3");
                     mySound.volume = .1;
                     mySound.load();
                     mySound.play();
@@ -154,16 +109,17 @@
     }
 
     function detectCrash(){
+        var output ='';
         for(var i=0; i<enemies.length; i++){
                 if(Math.abs(hero.x - enemies[i].x) < 10 && Math.abs(hero.y - enemies[i].y)<10){
-                    console.log('hero and enemy', i, 'collided');
-                    score -= 100;
+                    // console.log('hero and enemy', i, 'collided');
+                    output += "<div class = 'planehit' style='top:"+hero.y+"px; left:"+hero.x+"px;'></div>";
+                    score -= 50;
+                    console.log(hero.x, hero.y);
                 }
             }
         }
 
-
-    setInterval(gameLoop, 50);
 
 
     var keyState = {};
@@ -176,23 +132,18 @@
     },true);
 
     function keyLoop(){
-        if (keyState[37]){
+        if (keyState[37] && hero.x > 10){ //left
             hero.x -= 10;
         }
-        if(keyState[39]){
+        if(keyState[39] && hero.x < 1000){ //right
             hero.x+=10;
         }
-        if(keyState[38]){
+        if(keyState[38] && hero.y > 10){
             hero.y -= 10;
         }
-        if(keyState[40]){
+        if(keyState[40] && hero.y < 510){
             hero.y += 10;
         }
-        // else if(keyState[32]){
-        //     bullets.push({x: hero.x+17, y: hero.y-15});
-        //     displayBullets();
-        // }
-
         setTimeout(keyLoop, 40);
     }
 
@@ -202,16 +153,23 @@
         if(a.keyCode == 32){
             bullets.push({x: hero.x+17, y: hero.y-15});
             displayBullets();
+            var shoot = new Audio("sounds/shoot.mp3");
+            shoot.volume = .1;
+            shoot.load();
+            shoot.play();
         }
         displayHero();
         console.log(a.keyCode);
     }
-
     displayHero();
     displayEnemies();
 
 </script>
 
+
+    <div id = "header">
+        <h1>Plane Shooter</h1>
+    </div>
 </body>
 </html>
 
