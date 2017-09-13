@@ -6,22 +6,22 @@
         color: white;
     }
 	#container{
-		background: url('background.jpg');
+		background: url('spacebg.jpg');
 		width:800px;
 		height:550px;
 	}
 	#hero{
-		background: url('1942.gif');
-		background-position: -42px -111px;
-		width:47px;
-		height:40px;
+		background: url('spaceshipsprite.png');
+		background-position: -1px -1px;
+		width:62px;
+		height:59px;
 		position:absolute;
 	}
 	.enemy1{
-		background: url('1942.gif');
-		background-position: -30px -10px;
-		width:28px;
-		height:28px;
+		background: url('enemy.png');
+		background-position: -70px 0px;
+		width:37px;
+		height:32px;
 		position:absolute;
 	}
 

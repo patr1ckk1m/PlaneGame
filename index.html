@@ -42,7 +42,7 @@
 
     function moveEnemies(){
         for(var i=0; i<enemies.length; i++){
-            enemies[i].y += 5;
+            enemies[i].y += 4;
             if(enemies[i].y > 540){
                 enemies[i].y = 0;
                 enemies[i].x = Math.random()*800;
@@ -53,7 +53,7 @@
 
         function moveBullets(){
         for(var i=0; i<bullets.length; i++){
-            bullets[i].y -= 5;
+            bullets[i].y -= 4;
 
             if(bullets[i].y<0){
                 bullets[i] = bullets[bullets.length-1];
@@ -141,7 +141,7 @@
         if(keyState[38] && hero.y > 10){
             hero.y -= 10;
         }
-        if(keyState[40] && hero.y < 510){
+        if(keyState[40] && hero.y < 500){
             hero.y += 10;
         }
         setTimeout(keyLoop, 40);
@@ -151,7 +151,7 @@
     
     document.onkeydown = function(a){
         if(a.keyCode == 32){
-            bullets.push({x: hero.x+17, y: hero.y-15});
+            bullets.push({x: hero.x+24, y: hero.y-15});
             displayBullets();
             var shoot = new Audio("sounds/shoot.mp3");
             shoot.volume = .1;
